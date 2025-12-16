@@ -7,7 +7,7 @@
 
     <div class="post-wrapper">
         <div class="post">
-            <img src="{{ asset('frontend/img/bn1.jpg')}}" alt="">
+            <img src="{{ asset('frontend/img/bn5.jpg')}}" alt="">
         </div>
         <div class="post">
             <img src="{{ asset('frontend/img/bn2.jpg')}}" alt="">
