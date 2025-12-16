@@ -40,6 +40,7 @@
       <nav id="sidebar" class="sidebar js-sidebar">
         <div class="sidebar-content js-simplebar">
           <a class="sidebar-brand" href="{{URL::to('/dashboard')}}">
+            <img src="{{ asset('frontend/img/logo.jpg') }}" alt="Logo" style="height: 40px; width: auto;">
             <span class="align-middle">Shop thú cưng</span>
           </a>
 
