@@ -1,6 +1,33 @@
 @extends('layout')
 @section('content')
 
+<style>
+.post-slider {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.post-slider .post {
+    position: relative;
+}
+.post-slider .post img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    opacity: 0.8;
+}
+.post-slider .post::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.3) 100%);
+    pointer-events: none;
+}
+</style>
+
 <div class="post-slider">
     <i class="fa fa-chevron-left prev" aria-hidden="true"></i>
     <i class="fa fa-chevron-right next" aria-hidden="true"></i>
