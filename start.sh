@@ -13,16 +13,23 @@ php artisan cache:clear || true
 php artisan route:clear || true
 php artisan view:clear || true
 
-# ✅ Tạo key nếu lỡ thiếu (không bắt buộc nhưng giúp tránh crash)
+# Check APP_KEY
 if [ -z "$APP_KEY" ]; then
-  echo "APP_KEY is missing. Skipping key generation (set APP_KEY in Render env)."
+  echo "❌ APP_KEY is missing. Please set APP_KEY in Render env."
+  exit 1
 fi
 
-# ✅ Migrate: chạy an toàn, nếu fail sẽ in lỗi nhưng KHÔNG làm app chết
-echo "Running migrations..."
-php artisan migrate --force || (echo "Migrate failed - check logs for migration order/FK issues" && true)
+# Run migrations (bắt buộc phải chạy OK)
+echo "✅ Running migrations..."
+php artisan migrate --force
 
-# ✅ Cache lại cho production (tuỳ chọn, nếu bạn muốn)
+# Optional seed (bật bằng env RUN_SEED=true)
+if [ "$RUN_SEED" = "true" ]; then
+  echo "✅ Seeding database..."
+  php artisan db:seed --force
+fi
+
+# Cache lại cho production (tuỳ chọn)
 php artisan config:cache || true
 php artisan route:cache || true
 php artisan view:cache || true
