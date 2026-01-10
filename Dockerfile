@@ -3,9 +3,11 @@ FROM php:8.2-apache
 # System deps + PHP extensions needed by Laravel
 RUN apt-get update && apt-get install -y \
     git unzip libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
+    libpq-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql zip gd \
-    && a2enmod rewrite
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql pgsql zip gd \
+    && a2enmod rewrite \
+    && rm -rf /var/lib/apt/lists/*
 
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
