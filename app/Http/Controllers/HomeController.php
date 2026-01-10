@@ -20,6 +20,7 @@ class HomeController extends Controller
     public function index(){
         $alls = $this->sanphamRepository->allProduct();
         $sanphams = $this->sanphamRepository->relatedProduct();
+        $sanpham = $sanphams->first();
         $dogproducts = $this->sanphamRepository->dogProduct();
         $catproducts = $this->sanphamRepository->catProduct();
         $choGiongs = $this->sanphamRepository->choGiong();
@@ -27,6 +28,7 @@ class HomeController extends Controller
         return view('pages.home', [
             'alls' => $alls,
             'sanphams' => $sanphams,
+            'sanpham' => $sanpham,
             'dogproducts' => $dogproducts,
             'catproducts' => $catproducts,
             'choGiongs' => $choGiongs,
