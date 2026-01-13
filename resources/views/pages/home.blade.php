@@ -25,6 +25,64 @@
     </div>
 </div>
 
+<!-- Tất cả sản phẩm -->
+<div class="body">
+    <div class="body__mainTitle">
+        <h2>TẤT CẢ SẢN PHẨM</h2>
+    </div>
+
+    <div>
+        <div class="row">
+            @forelse($alls as $all)
+                <div class="col-lg-2_5 col-md-4 col-6 post2">
+                    <a href="{{ route('detail', ['id' => $all->id_sanpham]) }}">
+                        <div class="product">
+                            <div class="product__img">
+                                <img src="{{ $all->anhsp ?? '/upload/abc.png' }}" alt="">
+                            </div>
+                            <div class="product__sale">
+                                <div>
+                                    @if(!empty($all->giamgia))
+                                        -{{ $all->giamgia }}%
+                                    @else Mới
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="product__content">
+                                <div class="product__title">{{ $all->tensp ?? 'Sản phẩm' }}</div>
+
+                                <div class="product__pride-oldPride">
+                                    <span class="Price">
+                                        <bdi>
+                                            {{ number_format((float)($all->giasp ?? 0), 0, ',', '.') }}
+                                            <span class="currencySymbol">₫</span>
+                                        </bdi>
+                                    </span>
+                                </div>
+
+                                <div class="product__pride-newPride">
+                                    <span class="Price">
+                                        <bdi>
+                                            {{ number_format((float)($all->giakhuyenmai ?? ($all->giasp ?? 0)), 0, ',', '.') }}
+                                            <span class="currencySymbol">₫</span>
+                                        </bdi>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @empty
+                <div class="col-12">
+                    <p class="text-center">Chưa có sản phẩm.</p>
+                </div>
+            @endforelse
+        </div>
+
+    </div>
+</div>
+
 <!-- Sản phẩm cho chó -->
 <div class="body">
     <div class="body__mainTitle d-flex align-items-center">
@@ -402,71 +460,8 @@
     </div>
 </div>
 
-<div class="banner">
-    <div class="banner-top">
-        <img src="{{ asset('frontend/img/bn6.jpg') }}" alt="">
-    </div>
-</div>
-
-<!-- Tất cả sản phẩm -->
-<div class="body">
-    <div class="body__mainTitle">
-        <h2>TẤT CẢ SẢN PHẨM</h2>
-    </div>
-
-    <div>
-        <div class="row">
-            @forelse($alls as $all)
-                <div class="col-lg-2_5 col-md-4 col-6 post2">
-                    <a href="{{ route('detail', ['id' => $all->id_sanpham]) }}">
-                        <div class="product">
-                            <div class="product__img">
-                                <img src="{{ $all->anhsp ?? '/upload/abc.png' }}" alt="">
-                            </div>
-                            <div class="product__sale">
-                                <div>
-                                    @if(!empty($all->giamgia))
-                                        -{{ $all->giamgia }}%
-                                    @else Mới
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="product__content">
-                                <div class="product__title">{{ $all->tensp ?? 'Sản phẩm' }}</div>
-
-                                <div class="product__pride-oldPride">
-                                    <span class="Price">
-                                        <bdi>
-                                            {{ number_format((float)($all->giasp ?? 0), 0, ',', '.') }}
-                                            <span class="currencySymbol">₫</span>
-                                        </bdi>
-                                    </span>
-                                </div>
-
-                                <div class="product__pride-newPride">
-                                    <span class="Price">
-                                        <bdi>
-                                            {{ number_format((float)($all->giakhuyenmai ?? ($all->giasp ?? 0)), 0, ',', '.') }}
-                                            <span class="currencySymbol">₫</span>
-                                        </bdi>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            @empty
-                <div class="col-12">
-                    <p class="text-center">Chưa có sản phẩm.</p>
-                </div>
-            @endforelse
-        </div>
-
-        <center style="margin-top: 30px;">
-            <a href="{{ route('viewAll') }}" class="btn text-white" style="background: #ff4500;">Xem thêm</a>
-        </center>
-    </div>
-</div>
+<center style="margin-top: 30px;">
+    <a href="{{ route('viewAll') }}" class="btn text-white" style="background: #ff4500;">Xem thêm</a>
+</center>
 
 @endsection
