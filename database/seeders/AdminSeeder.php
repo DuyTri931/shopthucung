@@ -11,18 +11,18 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        // ✅ đảm bảo có quyền id = 1 trước (tránh lỗi FK)
+        // 1) tạo quyền admin nếu chưa có
         DB::table('phanquyen')->updateOrInsert(
             ['id_phanquyen' => 1],
-            ['tenquyen' => 'Admin'] // nếu cột khác tên -> đổi lại
+            ['tenquyen' => 'Admin']
         );
 
-        // ✅ tránh seed lại bị trùng email
+        // 2) tạo admin nếu chưa có / update nếu đã có
         Khachhang::updateOrCreate(
             ['email' => 'tritong392@gmail.com'],
             [
                 'hoten' => 'Admin',
-                'password' => Hash::make('tribro12'),
+                'password' => Hash::make('123'),
                 'diachi' => 'Admin Address',
                 'sdt' => '0123456789',
                 'id_phanquyen' => 1,

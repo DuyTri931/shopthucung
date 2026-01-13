@@ -33,11 +33,12 @@ class Khachhang extends Authenticatable
      *
      * @var array
      */
-    protected $casts = [
-        'id_kh' => 'int',
-        'sdt' => 'int',
-        'id_phanquyen' => 'int',
-    ];
+   protected $casts = [
+    'id_kh' => 'int',
+    'id_phanquyen' => 'int',
+    // bỏ sdt int
+];
+
 
     /**
      * Indicates if the model should be timestamped.
