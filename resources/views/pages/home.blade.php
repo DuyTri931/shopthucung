@@ -19,11 +19,9 @@
             <img src="{{ asset('frontend/img/bn6.jpg') }}" alt="">
         </div>
         <div class="post">
-            <img src="{{ asset('frontend/img/bn2.jpg') }}" alt="">
+            <img src="{{ asset('frontend/img/bn7.jpg') }}" alt="">
         </div>
-        <div class="post">
-            <img src="{{ asset('frontend/img/bn3.jpg') }}" alt="">
-        </div>
+       
     </div>
 </div>
 
