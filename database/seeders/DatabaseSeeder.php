@@ -10,6 +10,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminSeeder::class, // AdminSeeder của bạn đã updateOrInsert phanquyen rồi
+            ProductSeeder::class,
         ]);
     }
 }
