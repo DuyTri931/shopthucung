@@ -25,7 +25,7 @@ class ProductSeeder extends Seeder
             ['id_sanpham' => 1],
             [
                 'tensp' => 'Thức ăn cho chó Pedigree',
-                'anhsp' => '/upload/pedigree.jpg',
+                'anhsp' => '/upload/camcho.jpg.jpg',
                 'giasp' => 50000,
                 'mota' => 'Thức ăn dinh dưỡng cho chó.',
                 'giamgia' => 10,

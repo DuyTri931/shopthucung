@@ -3,127 +3,109 @@
 namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
-use App\Models\Sanpham;
 use App\Models\Danhmuc;
 use App\Http\Controllers\Controller;
-
 use App\Repositories\IProductRepository;
 
 class ProductController extends Controller
 {
-
     private $productRepository;
 
-    public function __construct(IProductRepository $productRepository) {
+    public function __construct(IProductRepository $productRepository)
+    {
         $this->productRepository = $productRepository;
     }
 
-    public function index(){
+    public function index()
+    {
         $products = $this->productRepository->allProduct();
-
         return view('admin.products.index', ['products' => $products]);
     }
 
-    public function create(){
+    public function create()
+    {
         $list_danhmucs = Danhmuc::all();
         return view('admin.products.create', ['list_danhmucs' => $list_danhmucs]);
     }
 
-    public function store(Request $request){
-
+    public function store(Request $request)
+    {
         $validatedData = $request->validate([
-            'tensp' => 'required',
-            'anhsp' => 'required',
-            'giasp' => 'required|decimal:0,2',
-            'mota' => 'nullable',
-            'giamgia' => 'nullable',
-            'giakhuyenmai' => 'nullable|decimal:0,2',
-            'soluong' => 'required|numeric',
+            'tensp' => 'required|string|max:255',
+            'anhsp' => 'required|image|mimes:jpg,jpeg,png,webp,gif|max:5120',
+            'giasp' => 'required|numeric|min:0',
+            'mota' => 'nullable|string',
+            'giamgia' => 'nullable|numeric|min:0|max:100',
+            'giakhuyenmai' => 'nullable|numeric|min:0',
+            'soluong' => 'required|numeric|min:0',
             'id_danhmuc' => 'required'
         ]);
 
-        // Lưu hình ảnh vào thư mục frontend/uploads
+        // ✅ Lưu ảnh vào: public/frontend/upload
+        // $imagePath trả về: upload/xxxx.jpg
         $imagePath = $request->file('anhsp')->store('upload', 'public_frontend');
-        
-        // Lấy tên file hình ảnh
-        $imageName = pathinfo($imagePath, PATHINFO_FILENAME);
 
-        // Lấy đuôi file hình ảnh
-        $imageExtension = $request->file('anhsp')->getClientOriginalExtension();
+        // ✅ Lưu DB chỉ: upload/xxxx.jpg
+        $validatedData['anhsp'] = $imagePath;
 
-        // Tạo đường dẫn đầy đủ cho hình ảnh
-        $imageUrl = "frontend/upload/{$imageName}.{$imageExtension}";
+        // ✅ Tính giá khuyến mãi (nếu không nhập giảm giá => 0)
+        $giagoc = (float) $validatedData['giasp'];
+        $giamgia = isset($validatedData['giamgia']) ? (float) $validatedData['giamgia'] : 0;
 
-        // Thêm đường dẫn hình ảnh vào dữ liệu được xác nhận
-        $validatedData['anhsp'] = $imageUrl;
-
-        //tinh giam gia
-        $giagoc = $validatedData['giasp'];
-        $giamgia = $validatedData['giamgia'];
-
-        $tinh = ($giagoc * $giamgia) / 100;
-        $validatedData['giakhuyenmai'] = $giagoc - $tinh;
+        $validatedData['giakhuyenmai'] = $giagoc - (($giagoc * $giamgia) / 100);
 
         $this->productRepository->storeProduct($validatedData);
 
-        return redirect()->route('product.index');
+        return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $list_danhmucs = Danhmuc::all();
         $product = $this->productRepository->findProduct($id);
-        return view('admin.products.edit', ['product' => $product, 'list_danhmucs' => $list_danhmucs]);
+
+        return view('admin.products.edit', [
+            'product' => $product,
+            'list_danhmucs' => $list_danhmucs
+        ]);
     }
 
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $validatedData = $request->validate([
-            'tensp' => 'required',
-            'anhsp' => 'nullable',
-            'giasp' => 'required|decimal:0,2',
-            'mota' => 'nullable',
-            'giamgia' => 'nullable',
-            'giakhuyenmai' => 'nullable|decimal:0,2',
-            'soluong' => 'required|numeric',
+            'tensp' => 'required|string|max:255',
+            'anhsp' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:5120',
+            'giasp' => 'required|numeric|min:0',
+            'mota' => 'nullable|string',
+            'giamgia' => 'nullable|numeric|min:0|max:100',
+            'giakhuyenmai' => 'nullable|numeric|min:0',
+            'soluong' => 'required|numeric|min:0',
             'id_danhmuc' => 'required'
         ]);
 
-        // Lưu hình ảnh vào thư mục frontend/uploads
-        if($request->file('anhsp')){
+        // ✅ Nếu có chọn ảnh mới thì lưu vào public/frontend/upload
+        if ($request->hasFile('anhsp')) {
             $imagePath = $request->file('anhsp')->store('upload', 'public_frontend');
-            
-            // Lấy tên file hình ảnh
-            $imageName = pathinfo($imagePath, PATHINFO_FILENAME);
-
-            // Lấy đuôi file hình ảnh
-            $imageExtension = $request->file('anhsp')->getClientOriginalExtension();
-
-            // Tạo đường dẫn đầy đủ cho hình ảnh
-            $imageUrl = "frontend/upload/{$imageName}.{$imageExtension}";
-
+            $validatedData['anhsp'] = $imagePath; // upload/xxx.jpg
+        } else {
+            // ✅ Giữ ảnh cũ (anhsp1 phải lưu kiểu upload/xxx.jpg)
+            $validatedData['anhsp'] = $request->anhsp1;
         }
-        else{
-            $imageUrl = $request->anhsp1;
-        }
-        
-        // Thêm đường dẫn hình ảnh vào dữ liệu được xác nhận
-        $validatedData['anhsp'] = $imageUrl;
 
-        //tinh giam gia
-        $giagoc = $validatedData['giasp'];
-        $giamgia = $validatedData['giamgia'];
+        // ✅ Tính giá khuyến mãi
+        $giagoc = (float) $validatedData['giasp'];
+        $giamgia = isset($validatedData['giamgia']) ? (float) $validatedData['giamgia'] : 0;
 
-        $tinh = ($giagoc * $giamgia) / 100;
-        $validatedData['giakhuyenmai'] = $giagoc - $tinh;
+        $validatedData['giakhuyenmai'] = $giagoc - (($giagoc * $giamgia) / 100);
 
         $this->productRepository->updateProduct($validatedData, $id);
 
         return redirect()->route('product.index')->with('success', 'Cập nhập sản phẩm thành công');
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $this->productRepository->deleteProduct($id);
-
         return redirect()->route('product.index')->with('success', 'Xóa sản phẩm thành công');
     }
-
 }
