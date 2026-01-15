@@ -42,7 +42,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'id_sanpham' => 2,
-                'tensp' => 'Pate Cho Mèo – Pate Fit4 Cats - Cá Ngừ Và Thanh...',
+                'tensp' => 'Pate Cho Mèo  Pate Fit4 Cats - Cá Ngừ Và Thanh...',
                 'anhsp' => '/frontend/upload/fit4cats-2.jpg',
                 'giasp' => 20000,
                 'mota' => null,
@@ -142,7 +142,7 @@ class ProductSeeder extends Seeder
             [
                 'id_sanpham' => 16,
                 'tensp' => 'Ức Gà Sấy Khô Dạng Miếng 50g Cho Chó Mèo – Thưởng ...',
-                'anhsp' => '/frontend/upload//uc-ga-16.jpg',
+                'anhsp' => '/frontend/upload/uc-ga-16.jpg', // sửa // thành /
                 'giasp' => 25000,
                 'mota' => null,
                 'giamgia' => 3,
@@ -178,7 +178,7 @@ class ProductSeeder extends Seeder
                 'anhsp' => '/frontend/upload/archie-19.jpg',
                 'giasp' => 400000,
                 'mota' => null,
-                'giamgia' => null, // trong ảnh là NULL
+                'giamgia' => null,
                 'giakhuyenmai' => 400000,
                 'soluong' => 1,
                 'id_danhmuc' => 6,
@@ -196,6 +196,16 @@ class ProductSeeder extends Seeder
             ],
         ];
 
+        // ✅ THÊM ĐOẠN NÀY: XOÁ SẢN PHẨM DƯ ("Đồ chơi cho chó" id=3) HOẶC XOÁ HẾT SẢN PHẨM KHÔNG NẰM TRONG LIST
+        $keepIds = array_column($products, 'id_sanpham');
+
+        // Option an toàn: xoá đúng id=3
+        DB::table('sanpham')->where('id_sanpham', 3)->delete();
+
+        // Option mạnh: chỉ giữ đúng các id trong ảnh (bật nếu bạn muốn sạch sẽ tuyệt đối)
+        DB::table('sanpham')->whereNotIn('id_sanpham', $keepIds)->delete();
+
+        // ====== UPSERT SẢN PHẨM ======
         foreach ($products as $p) {
             $id = $p['id_sanpham'];
             $data = $p;
