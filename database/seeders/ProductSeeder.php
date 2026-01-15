@@ -12,12 +12,12 @@ class ProductSeeder extends Seeder
         // Thêm danh mục mẫu nếu chưa có
         DB::table('danhmuc')->updateOrInsert(
             ['id_danhmuc' => 1],
-            ['tendanhmuc' => 'Thức ăn cho chó']
+            ['ten_danhmuc' => 'Thức ăn cho chó']
         );
 
         DB::table('danhmuc')->updateOrInsert(
             ['id_danhmuc' => 2],
-            ['tendanhmuc' => 'Thức ăn cho mèo']
+            ['ten_danhmuc' => 'Thức ăn cho mèo']
         );
 
         // Thêm sản phẩm mẫu
