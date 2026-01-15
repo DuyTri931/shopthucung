@@ -2,16 +2,23 @@
 @section('content')
 
 @php
+    // An toàn nếu controller chưa truyền biến
     $dogproducts = $dogproducts ?? [];
     $catproducts = $catproducts ?? [];
-    $choGiongs   = $choGiongs ?? [];
-    $meoGiongs   = $meoGiongs ?? [];
-    $alls        = $alls ?? [];
-@endphp
+    $choGiongs    = $choGiongs ?? [];
+    $meoGiongs    = $meoGiongs ?? [];
+    $alls         = $alls ?? [];
 
-@php
-    // fallback ảnh (đặt file abc.png trong public/frontend/upload/abc.png)
-    $fallbackImg = '/frontend/upload/abc.png';
+    // fallback ảnh (file phải tồn tại: public/frontend/upload/abc.jpg)
+    $fallbackImg = 'frontend/upload/abc.jpg';
+
+    // Hàm chuẩn hóa đường dẫn ảnh từ DB
+    // - DB lưu "/frontend/upload/abc.jpg" hoặc "frontend/upload/abc.jpg" đều OK
+    function imgUrl($path, $fallbackImg) {
+        if (!$path) return asset($fallbackImg);
+        $clean = ltrim($path, '/');     // bỏ dấu / đầu nếu có
+        return asset($clean);
+    }
 @endphp
 
 <div class="post-slider">
@@ -42,9 +49,9 @@
                         <div class="product">
                             <div class="product__img">
                                 <img
-                                    src="{{ $dogproduct->anhsp ?: $fallbackImg }}"
+                                    src="{{ imgUrl($dogproduct->anhsp ?? null, $fallbackImg) }}"
                                     alt="{{ $dogproduct->tensp ?? '' }}"
-                                    onerror="this.onerror=null;this.src='{{ $fallbackImg }}';"
+                                    onerror="this.onerror=null;this.src='{{ asset($fallbackImg) }}';"
                                 >
                             </div>
 
@@ -59,9 +66,7 @@
                             </div>
 
                             <div class="product__content">
-                                <div class="product__title">
-                                    {{ $dogproduct->tensp ?? 'Sản phẩm' }}
-                                </div>
+                                <div class="product__title">{{ $dogproduct->tensp ?? 'Sản phẩm' }}</div>
 
                                 <div class="product__pride-oldPride">
                                     <span class="Price">
@@ -91,50 +96,6 @@
             @endforelse
         </div>
     </div>
-
-    <!-- dogstyle placeholder -->
-    <div class="dogstyle">
-        <div class="row">
-            <div class="col-lg-2_5 col-md-4 col-6 post2">
-                <a href="#">
-                    <div class="product">
-                        <div class="product__img">
-                            <img src="{{ $fallbackImg }}" alt="" onerror="this.onerror=null;this.src='{{ $fallbackImg }}';">
-                        </div>
-                        <div class="product__sale"><div>Mới</div></div>
-
-                        <div class="product__content">
-                            <div class="product__title">Sản phẩm mẫu</div>
-                            <div class="product__pride-oldPride"><span class="Price"><bdi>300000 <span class="currencySymbol">₫</span></bdi></span></div>
-                            <div class="product__pride-newPride"><span class="Price"><bdi>250000 <span class="currencySymbol">₫</span></bdi></span></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- dogequi placeholder -->
-    <div class="dogequi">
-        <div class="row">
-            <div class="col-lg-2_5 col-md-4 col-6 post2">
-                <a href="#">
-                    <div class="product">
-                        <div class="product__img">
-                            <img src="{{ $fallbackImg }}" alt="" onerror="this.onerror=null;this.src='{{ $fallbackImg }}';">
-                        </div>
-                        <div class="product__sale"><div>Mới</div></div>
-
-                        <div class="product__content">
-                            <div class="product__title">Sản phẩm mẫu</div>
-                            <div class="product__pride-oldPride"><span class="Price"><bdi>300000 <span class="currencySymbol">₫</span></bdi></span></div>
-                            <div class="product__pride-newPride"><span class="Price"><bdi>250000 <span class="currencySymbol">₫</span></bdi></span></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="banner">
@@ -157,9 +118,9 @@
                         <div class="product">
                             <div class="product__img">
                                 <img
-                                    src="{{ $catproduct->anhsp ?: $fallbackImg }}"
+                                    src="{{ imgUrl($catproduct->anhsp ?? null, $fallbackImg) }}"
                                     alt="{{ $catproduct->tensp ?? '' }}"
-                                    onerror="this.onerror=null;this.src='{{ $fallbackImg }}';"
+                                    onerror="this.onerror=null;this.src='{{ asset($fallbackImg) }}';"
                                 >
                             </div>
 
@@ -198,50 +159,10 @@
                     </a>
                 </div>
             @empty
-                <div class="col-12"><p class="text-center">Chưa có sản phẩm dành cho mèo.</p></div>
+                <div class="col-12">
+                    <p class="text-center">Chưa có sản phẩm dành cho mèo.</p>
+                </div>
             @endforelse
-        </div>
-    </div>
-
-    <!-- catstyle placeholder -->
-    <div class="catstyle">
-        <div class="row">
-            <div class="col-lg-2_5 col-md-4 col-6 post2">
-                <a href="#">
-                    <div class="product">
-                        <div class="product__img">
-                            <img src="{{ $fallbackImg }}" alt="" onerror="this.onerror=null;this.src='{{ $fallbackImg }}';">
-                        </div>
-                        <div class="product__sale"><div>Mới</div></div>
-                        <div class="product__content">
-                            <div class="product__title">Sản phẩm mẫu</div>
-                            <div class="product__pride-oldPride"><span class="Price"><bdi>300000 <span class="currencySymbol">₫</span></bdi></span></div>
-                            <div class="product__pride-newPride"><span class="Price"><bdi>250000 <span class="currencySymbol">₫</span></bdi></span></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- catequi placeholder -->
-    <div class="catequi">
-        <div class="row">
-            <div class="col-lg-2_5 col-md-4 col-6 post2">
-                <a href="#">
-                    <div class="product">
-                        <div class="product__img">
-                            <img src="{{ $fallbackImg }}" alt="" onerror="this.onerror=null;this.src='{{ $fallbackImg }}';">
-                        </div>
-                        <div class="product__sale"><div>Mới</div></div>
-                        <div class="product__content">
-                            <div class="product__title">Sản phẩm mẫu</div>
-                            <div class="product__pride-oldPride"><span class="Price"><bdi>300000 <span class="currencySymbol">₫</span></bdi></span></div>
-                            <div class="product__pride-newPride"><span class="Price"><bdi>250000 <span class="currencySymbol">₫</span></bdi></span></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
         </div>
     </div>
 </div>
@@ -268,9 +189,9 @@
                         <div class="product">
                             <div class="product__img">
                                 <img
-                                    src="{{ $choGiong->anhsp ?: $fallbackImg }}"
+                                    src="{{ imgUrl($choGiong->anhsp ?? null, $fallbackImg) }}"
                                     alt="{{ $choGiong->tensp ?? '' }}"
-                                    onerror="this.onerror=null;this.src='{{ $fallbackImg }}';"
+                                    onerror="this.onerror=null;this.src='{{ asset($fallbackImg) }}';"
                                 >
                             </div>
 
@@ -322,9 +243,9 @@
                         <div class="product">
                             <div class="product__img">
                                 <img
-                                    src="{{ $meoGiong->anhsp ?: $fallbackImg }}"
+                                    src="{{ imgUrl($meoGiong->anhsp ?? null, $fallbackImg) }}"
                                     alt="{{ $meoGiong->tensp ?? '' }}"
-                                    onerror="this.onerror=null;this.src='{{ $fallbackImg }}';"
+                                    onerror="this.onerror=null;this.src='{{ asset($fallbackImg) }}';"
                                 >
                             </div>
 
@@ -375,58 +296,56 @@
         <h2>TẤT CẢ SẢN PHẨM</h2>
     </div>
 
-    <div>
-        <div class="row">
-            @forelse($alls as $all)
-                <div class="col-lg-2_5 col-md-4 col-6 post2">
-                    <a href="{{ route('detail', ['id' => $all->id_sanpham]) }}">
-                        <div class="product">
-                            <div class="product__img">
-                                <img
-                                    src="{{ $all->anhsp ?: $fallbackImg }}"
-                                    alt="{{ $all->tensp ?? '' }}"
-                                    onerror="this.onerror=null;this.src='{{ $fallbackImg }}';"
-                                >
-                            </div>
+    <div class="row">
+        @forelse($alls as $all)
+            <div class="col-lg-2_5 col-md-4 col-6 post2">
+                <a href="{{ route('detail', ['id' => $all->id_sanpham]) }}">
+                    <div class="product">
+                        <div class="product__img">
+                            <img
+                                src="{{ imgUrl($all->anhsp ?? null, $fallbackImg) }}"
+                                alt="{{ $all->tensp ?? '' }}"
+                                onerror="this.onerror=null;this.src='{{ asset($fallbackImg) }}';"
+                            >
+                        </div>
 
-                            <div class="product__sale">
-                                <div>
-                                    @if(!empty($all->giamgia))
-                                        -{{ $all->giamgia }}%
-                                    @else
-                                        Mới
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="product__content">
-                                <div class="product__title">{{ $all->tensp ?? 'Sản phẩm' }}</div>
-
-                                <div class="product__pride-oldPride">
-                                    <span class="Price">
-                                        <bdi>
-                                            {{ number_format((float)($all->giasp ?? 0), 0, ',', '.') }}
-                                            <span class="currencySymbol">₫</span>
-                                        </bdi>
-                                    </span>
-                                </div>
-
-                                <div class="product__pride-newPride">
-                                    <span class="Price">
-                                        <bdi>
-                                            {{ number_format((float)($all->giakhuyenmai ?? ($all->giasp ?? 0)), 0, ',', '.') }}
-                                            <span class="currencySymbol">₫</span>
-                                        </bdi>
-                                    </span>
-                                </div>
+                        <div class="product__sale">
+                            <div>
+                                @if(!empty($all->giamgia))
+                                    -{{ $all->giamgia }}%
+                                @else
+                                    Mới
+                                @endif
                             </div>
                         </div>
-                    </a>
-                </div>
-            @empty
-                <div class="col-12"><p class="text-center">Chưa có sản phẩm.</p></div>
-            @endforelse
-        </div>
+
+                        <div class="product__content">
+                            <div class="product__title">{{ $all->tensp ?? 'Sản phẩm' }}</div>
+
+                            <div class="product__pride-oldPride">
+                                <span class="Price">
+                                    <bdi>
+                                        {{ number_format((float)($all->giasp ?? 0), 0, ',', '.') }}
+                                        <span class="currencySymbol">₫</span>
+                                    </bdi>
+                                </span>
+                            </div>
+
+                            <div class="product__pride-newPride">
+                                <span class="Price">
+                                    <bdi>
+                                        {{ number_format((float)($all->giakhuyenmai ?? ($all->giasp ?? 0)), 0, ',', '.') }}
+                                        <span class="currencySymbol">₫</span>
+                                    </bdi>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        @empty
+            <div class="col-12"><p class="text-center">Chưa có sản phẩm.</p></div>
+        @endforelse
     </div>
 </div>
 
