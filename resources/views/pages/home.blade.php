@@ -349,6 +349,8 @@
     </div>
 </div>
 
+<script src="https://api.sale.ai.vn/static/widget.js?chatbotId=NzAz" async defer></script>
+
 <center style="margin-top: 30px;">
     <a href="{{ route('viewAll') }}" class="btn text-white" style="background: #ff4500;">Xem thêm</a>
 </center>
