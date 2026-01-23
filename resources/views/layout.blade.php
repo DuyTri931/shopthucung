@@ -8,21 +8,28 @@
 
     <link rel="shortcut icon" type="image/png" href="{{ asset('frontend/img/logo.jpg') }}"/>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
+    {{-- Bootstrap CSS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <link rel="stylesheet" href="{{ asset('frontend/css/bsgrid.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.min.css') }}">
+    {{-- CSS local --}}
+    <link rel="stylesheet" href="{{ asset('frontend/css/bsgrid.min.css') }}?v={{ filemtime(public_path('frontend/css/bsgrid.min.css')) }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.min.css') }}?v={{ filemtime(public_path('frontend/css/style.min.css')) }}">
 
-    {{-- slick css để slider đẹp --}}
+    {{-- slick css --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
 
+    {{-- fontawesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" />
+
+    {{-- jQuery (để slick chạy) --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    {{-- Bootstrap JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
 <div class="header">
     <div class="navbar">
@@ -120,7 +127,9 @@
     </div>
 </footer>
 
+{{-- slick --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
 <script>
     $(document).ready(function () {
         $('.post-wrapper').slick({
@@ -133,23 +142,23 @@
             nextArrow: $('.next'),
             appendDots: $(".dot"),
         });
-    });
 
-    $('.post-wrapper2').slick({
-        slidesToShow: 5,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 2000,
-        prevArrow: $('.prev2'),
-        nextArrow: $('.next2'),
-        responsive: [
-            { breakpoint: 1024, settings: { slidesToShow: 4, slidesToScroll: 3, infinite: true } },
-            { breakpoint: 600,  settings: { slidesToShow: 3, slidesToScroll: 2 } },
-            { breakpoint: 480,  settings: { slidesToShow: 2, slidesToScroll: 1 } }
-        ]
+        $('.post-wrapper2').slick({
+            slidesToShow: 5,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 2000,
+            prevArrow: $('.prev2'),
+            nextArrow: $('.next2'),
+            responsive: [
+                { breakpoint: 1024, settings: { slidesToShow: 4, slidesToScroll: 3, infinite: true } },
+                { breakpoint: 600,  settings: { slidesToShow: 3, slidesToScroll: 2 } },
+                { breakpoint: 480,  settings: { slidesToShow: 2, slidesToScroll: 1 } }
+            ]
+        });
     });
 </script>
 
-<script src="{{ asset('frontend/script/script.js') }}"></script>
+<script src="{{ asset('frontend/script/script.js') }}?v={{ filemtime(public_path('frontend/script/script.js')) }}"></script>
 </body>
 </html>

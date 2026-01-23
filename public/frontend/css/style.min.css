@@ -1462,63 +1462,118 @@ footer {
   }
 }
 
-/* ===== CÂN ĐỐI CARD SẢN PHẨM ===== */
+/* =========================
+   FIX GRID SẢN PHẨM BỊ LỆCH
+   DÁN CUỐI FILE style.min.css
+   ========================= */
 
-/* để mỗi cột cao bằng nhau */
-.col-lg-2_5 {
-  display: flex;
+/* 1) Fix gutter do bạn custom .row -10px */
+.row {
+  margin-left: -10px;
+  margin-right: -10px;
 }
 
+/* áp cho mọi cột bootstrap */
+.row>[class*="col-"] {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* 2) Cột 2.5 (20%) cao đều nhau */
+.col-lg-2_5 {
+  display: flex;
+  padding-bottom: 10px;
+}
+
+/* giữ đúng 20% trên desktop */
+@media (min-width: 992px) {
+  .col-lg-2_5 {
+    -ms-flex: 0 0 20%;
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}
+
+/* 3) Card sản phẩm cao đều + bố cục dọc */
 .col-lg-2_5 .product {
   width: 100%;
 }
 
-/* card sản phẩm cao đều + bố cục dọc */
 .product {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-/* khung ảnh cố định chiều cao */
+/* 4) Khung ảnh cố định chiều cao để không lệch */
 .product__img {
   height: 220px;
-  /* bạn có thể chỉnh 200/240 tùy ý */
+  /* chỉnh 200/240 tùy ý */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
-/* ép ảnh nằm gọn trong khung */
+/* ép ảnh gọn trong khung */
 .product__img img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  /* muốn phủ kín thì đổi thành cover */
+  /* muốn phủ kín đổi cover */
   min-height: unset !important;
-  /* bỏ min-height 200px cũ */
+  /* override min-height cũ */
+  display: block;
 }
 
-/* phần nội dung co giãn */
+/* 5) Nội dung co giãn, giá luôn nằm đáy */
 .product__content {
+  padding: 10px;
+
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-/* tiêu đề cố định tối đa 2 dòng -> không làm card cao lên */
 .product__title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  /* cố định 2 dòng => card không cao thấp lung tung */
   min-height: calc(1.3em * 2);
   line-height: 1.3;
 }
 
-/* đẩy phần giá xuống đáy card */
 .product__pride-oldPride {
+  text-decoration: line-through;
+  color: #999;
+  margin-bottom: 4px;
+  font-size: 13px;
+
   margin-top: auto;
+  /* đẩy block giá xuống đáy */
 }
 
-/*carosel multi pic*/
+.product__pride-newPride {
+  font-size: 18px;
+  color: #ff4500;
+  font-weight: bold;
+}
+
+/* 6) post2 chỉ dành cho CAROUSEL, không được phá GRID */
+/* --- carousel --- */
 .post-slider2 {
   position: relative;
 }
@@ -1554,11 +1609,20 @@ footer {
 .post-wrapper2 .post2 img {
   width: 100%;
   height: 100%;
-  background-size: cover;
+  object-fit: cover;
 }
 
 /* RESET post2 trong grid sản phẩm (nếu HTML vẫn còn class post2) */
 .body .row .post2 {
   width: auto !important;
-  display: flex !important;
+  display: block !important;
+  /* ✅ QUAN TRỌNG: đừng để flex */
+}
+
+/* 7) Responsive an toàn */
+@media (max-width: 992px) {
+  .body {
+    width: 100%;
+    margin: 0 10px;
+  }
 }
